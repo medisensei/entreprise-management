@@ -17,13 +17,13 @@ public class Supplier {
 
     @Id
     @Column(name = "SUPPLIER_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "SUPPLIER_SOURCE")
     private String source;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Person person;
 
 

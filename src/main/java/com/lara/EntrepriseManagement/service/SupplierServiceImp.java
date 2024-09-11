@@ -6,6 +6,7 @@ import com.lara.EntrepriseManagement.mappers.SupplierMapper;
 import com.lara.EntrepriseManagement.models.Supplier;
 import com.lara.EntrepriseManagement.repository.ISupplierRepository;
 import com.lara.EntrepriseManagement.service.interfaces.ISupplierService;
+import com.lara.EntrepriseManagement.utility.TextUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,7 @@ import static com.lara.EntrepriseManagement.utility.EntityUpdateUtils.updateFiel
 
 @Service
 @RequiredArgsConstructor
-public class SupplierServiceImp implements ISupplierService{
+public class SupplierServiceImp implements ISupplierService {
 
     private static final int MAX_PER_PAGE = 5;
 
@@ -26,13 +27,15 @@ public class SupplierServiceImp implements ISupplierService{
 
     private final SupplierMapper supplierMapper;
 
+    private final TextUtil textUtil;
+
+
     @Override
     public SupplierDTO getById(Long id) {
         Optional<Supplier> supOpt = supplierRepository.findById(id);
         return supOpt
                 .map(supplierMapper::toDto)
-                .orElseThrow( () -> new TMNotFoundException("Supplier with Id: %s doesn't exist"));
-
+                .orElseThrow(() -> new TMNotFoundException(textUtil.getMessage("error.notfound", "Supplier", id)));
 
     }
 
@@ -46,17 +49,18 @@ public class SupplierServiceImp implements ISupplierService{
         return supplierMapper.toDTOs(supplierRepository.findAll());
     }
 
+
     @Override
     public void add(SupplierDTO supplierDTO) {
 
-        this.supplierRepository.saveAndFlush(supplierMapper.toEntity(supplierDTO));
+        this.supplierRepository.save(supplierMapper.toEntity(supplierDTO));
 
     }
 
     @Override
     public void edit(SupplierDTO supplierDTO) {
 
-       Supplier supplier = supplierRepository.findById(supplierMapper.toEntity(supplierDTO).getId()).get();
+        Supplier supplier = supplierRepository.findById(supplierMapper.toEntity(supplierDTO).getId()).get();
         updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().name(), supplier.getPerson()::setName);
         updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().cin(), supplier.getPerson()::setCin);
         updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().rib(), supplier.getPerson()::setRib);
@@ -77,13 +81,13 @@ public class SupplierServiceImp implements ISupplierService{
 
     @Override
     public List<SupplierDTO> getByPage(int page) {
-       Page<Supplier> pageSupplier = this.supplierRepository.findAll(PageRequest.of(page, MAX_PER_PAGE));
-      return supplierMapper.toDTOs(pageSupplier.getContent());
+        Page<Supplier> pageSupplier = this.supplierRepository.findAll(PageRequest.of(page, MAX_PER_PAGE));
+        return supplierMapper.toDTOs(pageSupplier.getContent());
 
     }
 
     @Override
     public List<SupplierDTO> lookup(String text) {
-        throw new  UnsupportedOperationException("getById not implemented yet");
+        throw new UnsupportedOperationException("getById not implemented yet");
     }
 }
