@@ -7,6 +7,7 @@ import com.lara.EntrepriseManagement.models.Supplier;
 import com.lara.EntrepriseManagement.repository.ISupplierRepository;
 import com.lara.EntrepriseManagement.service.interfaces.ISupplierService;
 import com.lara.EntrepriseManagement.utility.TextUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,10 +33,10 @@ public class SupplierServiceImp implements ISupplierService {
 
     @Override
     public SupplierDTO getById(Long id) {
-        Optional<Supplier> supOpt = supplierRepository.findById(id);
-        return supOpt
+        String supplier = textUtil.getMessage("supplier");
+        return supplierRepository.findById(id)
                 .map(supplierMapper::toDto)
-                .orElseThrow(() -> new TMNotFoundException(textUtil.getMessage("error.notfound", "Supplier", id)));
+                .orElseThrow(() -> new TMNotFoundException(textUtil.getMessage("error.notfound",supplier, id)));
 
     }
 
@@ -53,22 +54,27 @@ public class SupplierServiceImp implements ISupplierService {
     @Override
     public void add(SupplierDTO supplierDTO) {
 
-        this.supplierRepository.save(supplierMapper.toEntity(supplierDTO));
+        String supplier = textUtil.getMessage("supplier");
+//TODO validations..
+        if (supplierDTO.personDTO().name() != null && !supplierDTO.personDTO().name().isEmpty()) {
+            this.supplierRepository.save(supplierMapper.toEntity(supplierDTO));
+        } else throw new TMNotFoundException(textUtil.getMessage("error.feildempty", supplier));
 
     }
 
     @Override
-    public void edit(SupplierDTO supplierDTO) {
+    public void edit(SupplierDTO supplierDTO, Long id) {
 
-        Supplier supplier = supplierRepository.findById(supplierMapper.toEntity(supplierDTO).getId()).get();
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().name(), supplier.getPerson()::setName);
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().cin(), supplier.getPerson()::setCin);
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().rib(), supplier.getPerson()::setRib);
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().address(), supplier.getPerson()::setAddress);
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().email(), supplier.getPerson()::setEmail);
-        updateFieldIfNotNullOrEmpty(supplierDTO.personDTO().phone(), supplier.getPerson()::setPhone);
+        SupplierDTO supplierd = getById(id);
 
-        supplierRepository.saveAndFlush(supplier);
+        //TODO validations..
+        Supplier supplier = supplierMapper.toEntity(supplierDTO);
+        supplier.setId(id);
+        supplier.getPerson().setId(supplierd.personDTO().id());
+        
+        Supplier savedSupplier = supplierRepository.save(supplier);
+
+
 
     }
 

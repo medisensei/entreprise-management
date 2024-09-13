@@ -6,9 +6,7 @@ import com.lara.EntrepriseManagement.utility.TextUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +18,9 @@ public class SupplierController {
 
     private final TextUtil textUtil;
 
+    @GetMapping("/suppliers")
     public ResponseEntity<List<SupplierDTO>> allSuppliers() {
+
         List<SupplierDTO> suppliers = supplierServiceI.getAll();
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -37,6 +37,28 @@ public class SupplierController {
                 .status(HttpStatus.CREATED)
                 .body(textUtil.getMessage("http.created", supplier));
     }
+
+
+    @PutMapping("/suppliers/{id}")
+    public ResponseEntity<String> editSupplier(@RequestBody SupplierDTO supplierDTO,@PathVariable("id") Long id) {
+
+        supplierServiceI.edit(supplierDTO,id);
+        String namePrefix = textUtil.getMessage("supplier");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(textUtil.getMessage("http.updated", namePrefix));
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
