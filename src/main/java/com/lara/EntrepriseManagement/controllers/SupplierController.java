@@ -32,7 +32,6 @@ public class SupplierController {
     public ResponseEntity<SupplierDTO> addSupplier(@RequestBody SupplierDTO supplierDTO) {
 
         SupplierDTO supplierDTO1 = supplierServiceI.add(supplierDTO);
-        String supplier = textUtil.getMessage("supplier");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(supplierDTO1);
@@ -40,13 +39,25 @@ public class SupplierController {
 
 
     @PutMapping("/suppliers/{id}")
-    public ResponseEntity<SupplierDTO> editSupplier(@RequestBody SupplierDTO supplierDTO,@PathVariable("id") Long id) {
+    private ResponseEntity<SupplierDTO> editSupplier(@RequestBody SupplierDTO supplierDTO,@PathVariable("id") Long id) {
 
         SupplierDTO supplierDTO1 = supplierServiceI.edit(supplierDTO,id);
         String namePrefix = textUtil.getMessage("supplier");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(supplierDTO1);
+    }
+
+
+    @DeleteMapping("/suppliers/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+
+        supplierServiceI.delete(id);
+        String supplier = textUtil.getMessage("supplier");
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(textUtil.getMessage("error.deleted", supplier, id));
     }
 
 

@@ -78,7 +78,10 @@ public class SupplierServiceImp implements ISupplierService {
     @Override
     public void delete(Long aLong) {
 
+        //TODO validations...
         supplierRepository.deleteById(aLong);
+
+
 
     }
 
