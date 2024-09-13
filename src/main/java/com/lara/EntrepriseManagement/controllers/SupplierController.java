@@ -29,24 +29,24 @@ public class SupplierController {
 
 
     @PostMapping("/suppliers")
-    public ResponseEntity<String> addSupplier(@RequestBody SupplierDTO supplierDTO) {
+    public ResponseEntity<SupplierDTO> addSupplier(@RequestBody SupplierDTO supplierDTO) {
 
-        supplierServiceI.add(supplierDTO);
+        SupplierDTO supplierDTO1 = supplierServiceI.add(supplierDTO);
         String supplier = textUtil.getMessage("supplier");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(textUtil.getMessage("http.created", supplier));
+                .body(supplierDTO1);
     }
 
 
     @PutMapping("/suppliers/{id}")
-    public ResponseEntity<String> editSupplier(@RequestBody SupplierDTO supplierDTO,@PathVariable("id") Long id) {
+    public ResponseEntity<SupplierDTO> editSupplier(@RequestBody SupplierDTO supplierDTO,@PathVariable("id") Long id) {
 
-        supplierServiceI.edit(supplierDTO,id);
+        SupplierDTO supplierDTO1 = supplierServiceI.edit(supplierDTO,id);
         String namePrefix = textUtil.getMessage("supplier");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(textUtil.getMessage("http.updated", namePrefix));
+                .body(supplierDTO1);
     }
 
 

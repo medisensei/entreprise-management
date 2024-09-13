@@ -36,7 +36,7 @@ public class SupplierServiceImp implements ISupplierService {
         String supplier = textUtil.getMessage("supplier");
         return supplierRepository.findById(id)
                 .map(supplierMapper::toDto)
-                .orElseThrow(() -> new TMNotFoundException(textUtil.getMessage("error.notfound",supplier, id)));
+                .orElseThrow(() -> new TMNotFoundException(textUtil.getMessage("error.notfound", supplier, id)));
 
     }
 
@@ -52,18 +52,17 @@ public class SupplierServiceImp implements ISupplierService {
 
 
     @Override
-    public void add(SupplierDTO supplierDTO) {
+    public SupplierDTO add(SupplierDTO supplierDTO) {
 
         String supplier = textUtil.getMessage("supplier");
-//TODO validations..
-        if (supplierDTO.getPersonDTO().getName() != null && !supplierDTO.getPersonDTO().getName().isEmpty()) {
-            this.supplierRepository.save(supplierMapper.toEntity(supplierDTO));
-        } else throw new TMNotFoundException(textUtil.getMessage("error.feildempty", supplier));
 
+        //TODO validations..
+        Supplier savedSupplier = supplierRepository.save(supplierMapper.toEntity(supplierDTO));
+        return supplierMapper.toDto(savedSupplier);
     }
 
     @Override
-    public void edit(SupplierDTO supplierDTO, Long id) {
+    public SupplierDTO edit(SupplierDTO supplierDTO, Long id) {
 
         SupplierDTO supplierd = getById(id);
 
@@ -71,8 +70,8 @@ public class SupplierServiceImp implements ISupplierService {
         Supplier supplier = supplierMapper.toEntity(supplierDTO);
         supplier.setId(id);
         supplier.getPerson().setId(supplierd.getPersonDTO().getId());
-        
         Supplier savedSupplier = supplierRepository.save(supplier);
+        return supplierMapper.toDto(savedSupplier);
 
     }
 

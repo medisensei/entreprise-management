@@ -13,9 +13,9 @@ public interface ISupplierService {
 
     List<SupplierDTO> getAll();
 
-    void add(SupplierDTO t);
+    SupplierDTO add(SupplierDTO t);
 
-    void edit(SupplierDTO t, Long id);
+    SupplierDTO edit(SupplierDTO t, Long id);
 
     void delete(Long l);
 
