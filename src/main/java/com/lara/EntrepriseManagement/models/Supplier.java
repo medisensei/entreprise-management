@@ -23,7 +23,7 @@ public class Supplier {
     @Column(name = "SUPPLIER_SOURCE")
     private String source;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Person person;
 
 

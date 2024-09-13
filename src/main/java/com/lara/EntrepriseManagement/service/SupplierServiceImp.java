@@ -56,7 +56,7 @@ public class SupplierServiceImp implements ISupplierService {
 
         String supplier = textUtil.getMessage("supplier");
 //TODO validations..
-        if (supplierDTO.personDTO().name() != null && !supplierDTO.personDTO().name().isEmpty()) {
+        if (supplierDTO.getPersonDTO().getName() != null && !supplierDTO.getPersonDTO().getName().isEmpty()) {
             this.supplierRepository.save(supplierMapper.toEntity(supplierDTO));
         } else throw new TMNotFoundException(textUtil.getMessage("error.feildempty", supplier));
 
@@ -70,11 +70,9 @@ public class SupplierServiceImp implements ISupplierService {
         //TODO validations..
         Supplier supplier = supplierMapper.toEntity(supplierDTO);
         supplier.setId(id);
-        supplier.getPerson().setId(supplierd.personDTO().id());
+        supplier.getPerson().setId(supplierd.getPersonDTO().getId());
         
         Supplier savedSupplier = supplierRepository.save(supplier);
-
-
 
     }
 

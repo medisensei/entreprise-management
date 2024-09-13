@@ -1,6 +1,16 @@
 package com.lara.EntrepriseManagement.dto;
 
-public record SupplierDTO(Long id,
-                          String source,
-                          PersonDTO personDTO) {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class SupplierDTO {
+    private Long id;
+    private String source;
+    private PersonDTO personDTO;
 }

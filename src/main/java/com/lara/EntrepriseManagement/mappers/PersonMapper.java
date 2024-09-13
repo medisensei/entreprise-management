@@ -11,27 +11,27 @@ public class PersonMapper implements Mapper<Person, PersonDTO> {
     public Person toEntity(PersonDTO personDTO) {
         if (personDTO == null) return null;
         return Person.builder()
-                .id(personDTO.id())
-                .name(personDTO.name())
-                .rib(personDTO.rib())
-                .cin(personDTO.cin())
-                .email(personDTO.email())
-                .phone(personDTO.phone())
-                .address(personDTO.address())
+                .id(personDTO.getId())
+                .name(personDTO.getName())
+                .rib(personDTO.getRib())
+                .cin(personDTO.getCin())
+                .email(personDTO.getEmail())
+                .phone(personDTO.getPhone())
+                .address(personDTO.getAddress())
                 .build();
     }
 
     @Override
     public PersonDTO toDto(Person person) {
         if (person == null) return null;
-        return new PersonDTO(
-                person.getId(),
-                person.getName(),
-                person.getRib(),
-                person.getCin(),
-                person.getEmail(),
-                person.getPhone(),
-                person.getAddress()
-        );
+        return PersonDTO.builder()
+                .id(person.getId())
+                .name(person.getName())
+                .rib(person.getRib())
+                .cin(person.getCin())
+                .email(person.getEmail())
+                .phone(person.getPhone())
+                .address(person.getAddress())
+                .build();
     }
 }

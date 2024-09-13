@@ -1,10 +1,20 @@
 package com.lara.EntrepriseManagement.dto;
 
-public record PersonDTO(
-        Long id,
-        String name,
-        String address,
-        String email,
-        String phone,
-        String cin,
-        String rib) {}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class PersonDTO {
+    private Long id;
+    private String name;
+    private String address;
+    private String email;
+    private String phone;
+    private String cin;
+    private String rib;
+}
